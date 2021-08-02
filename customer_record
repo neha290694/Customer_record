@@ -1,0 +1,123 @@
+from tkinter import *
+import tkinter.messagebox as Messagebox
+import mysql.connector
+
+
+# inserting the record
+def insert():
+        acc_no = e_an.get()
+        name = e_name.get()
+        bal = e_bal.get()
+
+        if(acc_no == "" or name == "" or bal== ""):
+                Messagebox.showinfo("All fields are necessary.")
+
+        else:
+                con = mysql.connector.connect(host = 'localhost',user ='root',password = 'June@2021',database = 'employee_1')
+                cursor= con.cursor()
+                cursor.execute("insert into details value('"+ acc_no +"','"+ name + "','" + bal +"')")
+                cursor.execute("commit");
+                
+                # after insert, update and delete the entry_box should be empty.
+                e_an.delete(0,'end')
+                e_name.delete(0,'end')
+                e_bal.delete(0,'end')
+               
+                Messagebox.showinfo("Inserted successfully !")
+                con.close();
+                return
+                
+# updating the record
+def update():
+        acc_no = e_an.get()
+        name = e_name.get()
+        bal = e_bal.get()
+
+        if(acc_no == "" or name == "" or bal== ""):
+                Messagebox.showinfo("All fields are necessary.")
+
+        else:
+                con = mysql.connector.connect(host = 'localhost',user ='root',password = 'June@2021',database = 'employee_1')
+                cursor= con.cursor()
+                cursor.execute('update details set bal = bal + %d where acc_no =%d'%(int(bal),  int(acc_no)))
+                cursor.execute("commit");
+
+                # after insert, update and delete the entry_box should be empty.
+                e_an.delete(0,'end')
+                e_name.delete(0,'end')
+                e_bal.delete(0,'end')
+               
+                Messagebox.showinfo("Updated successfully !")
+                con.close();
+                return
+      
+# deleting  the record
+def delete():
+        if(e_an.get() == ""):
+                Messagebox.showinfo("Account no is necessary")
+        else:
+                con = mysql.connector.connect(host = 'localhost',user ='root',password = 'June@2021',database = 'employee_1')
+                cursor= con.cursor()
+
+                cursor.execute("delete from details  where acc_no ='"+ e_an.get()+"'")
+                cursor.execute("commit");
+
+                # after insert, update and delete the entry_box should be empty.
+                e_an.delete(0,'end')
+                e_name.delete(0,'end')
+                e_bal.delete(0,'end')
+                
+                Messagebox.showinfo("deleted successfully !")
+                con.close();
+        return
+
+
+# GUI  interface by using the tkinter
+root =Tk()
+
+l=Label(root,text=' Customer record',font="Arial 20", fg = "red")
+l.grid(row=0,column = 0)
+
+acc_no =Label(root,text='Account number - ',font="Arial 13")
+acc_no.grid(row=2,column = 0)
+
+name=Label(root,text='Name -',font="Arial 13")
+name.grid(row=4,column = 0)
+
+bal=Label(root,text='Balance -',font="Arial 13")
+bal.grid(row=6,column = 0)
+
+
+e_an=Entry(root,font="Arial 13")
+e_an.grid(row=2,column = 1)
+
+e_name=Entry(root,font="Arial 13")
+e_name.grid(row=4,column = 1)
+
+e_bal=Entry(root,font="Arial 13")
+e_bal.grid(row=6,column = 1)
+
+b1=Button(root,text='Insert',font="Arial 13",command = insert)
+b1.grid(row=8,column = 0)
+
+b2=Button(root,text='Update',font="Arial 13",command = update)
+b2.grid(row=10,column = 0)
+
+b3=Button(root,text='Delete',font="Arial 13",command = delete)
+b3.grid(row=12,column = 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
